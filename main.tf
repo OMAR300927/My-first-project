@@ -13,6 +13,7 @@ provider "kubectl" {
 
 
 resource "kubectl_manifest" "app" {
-  yaml_body = file("${path.module}/K8s")
+  for_each  = fileset("${path.module}/k8s", "*.yaml")
+  yaml_body = file("${path.module}/k8s/${each.value}")
 }
 
