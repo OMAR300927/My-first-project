@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment
+  labels:
+    app: flask
+spec:
+  selector:
+    matchLabels:
+      app: flask
+  template:
+    metadata:
+      labels:
+        app: flask
+    spec:
+      containers:
+      - name: flask-container
+        image: omarsa999/myfirstimage:latest
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - configMapRef: 
+            name: flask-configmap
+        - secretRef:
+            name: flask-secret
+        resources:
+          requests:
+            cpu: "100m"       # يطلب 0.1 نواة CPU (خفيف جدًا)
+            memory: "128Mi"   # يطلب 128 ميجابايت RAM
+          limits:
+            cpu: "250m"       # أقصى 0.25 نواة CPU
+            memory: "256Mi"
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-service
+spec:
+  selector:
+    app: flask
+  type: NodePort
+  ports:
+  - port: 8000
+    targetPort: 5000
+    nodePort: 30007
