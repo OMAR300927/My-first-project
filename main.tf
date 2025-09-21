@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "kubectl" {
-  config_path = "C:\Users\omsa3\.kube\config"
+  config_path = "C:/Users/omsa3/.kube/config"
 }
 
 
