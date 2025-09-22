@@ -1,6 +1,6 @@
 flask hello-world project
 
-Build and deploy a simple flask application using jenkins and K8s
+Build and deploy a simple flask application using jenkins, K8s and Terraform
 
 # Prerequisites
 
@@ -10,6 +10,7 @@ Build and deploy a simple flask application using jenkins and K8s
 * Git and GitHub
 * Jenkins
 * K8s
+* Terraform
 
 # Steps in the CI/CD pipeline
 
@@ -24,7 +25,8 @@ Build and deploy a simple flask application using jenkins and K8s
 9. Set up K8s on a host using Minikube
 10. Create a K8s deployment and service for the application
 11. Create a K8s Ingress to expose the Flask service externally
-12. Use Jenkins to deploy the application on K8s
+12. Write Terraform file preparing the infrastructure
+13. Use Jenkins to deploy the application on K8s
 
 # Project structure
 
@@ -38,6 +40,7 @@ Build and deploy a simple flask application using jenkins and K8s
 * flask-configmap.yaml - K8s configmap file
 * postgres.yaml - K8s deployment and service file for postgres DB
 * ingress.yaml - K8s Ingress file to expose Flask service externally
+* main.tf - Terraform file
 
 # Conclusion
 
@@ -46,3 +49,9 @@ Build and deploy a simple flask application using jenkins and K8s
 * Unit tests are implemented using `pytest` in `test_app.py`.
 * I used credentials for Docker Hub and K8s, after deploy the application, run `minikube service flask-service` to access it in browser
 * Or you can use ingress by run `minikube tunnel` to access it , But if you use this method, you should also update your hosts file
+* Here i used Kubectl_manifest, fileset and for_each in main.tf. So i won't have any problem when use `terraform apply` and `kubctl apply`, so Terraform well take all yaml files as one resource
+
+# Notes
+
+* If you define resource for each yaml file, then you can't use `terraform apply` and `kubectl apply` together you should only choose one of them
+* Or if you want you can use `Terraform apply` with the static yaml files, and `Kubectl apply` with the dynamic files
