@@ -16,4 +16,3 @@ resource "kubectl_manifest" "app" {
   for_each  = fileset("${path.module}/k8s", "*.yaml")
   yaml_body = file("${path.module}/k8s/${each.value}")
 }
-
