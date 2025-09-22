@@ -9,7 +9,7 @@ pipeline {
 
         stage('Test') {
             steps{
-                bat 'C:/Users/omsa3/AppData/Local/Programs/Python/Python313/python.exe -m pytest myproj1/my-app/test_app.py'
+                bat 'C:/Users/omsa3/AppData/Local/Programs/Python/Python313/python.exe -m pytest my-app/test_app.py'
             }
         }
 
@@ -20,8 +20,21 @@ pipeline {
                                 passwordVariable: 'DOCKER_PASS')]) {
                     bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
                 }
-                bat 'docker build -t omarsa999/myfirstimage:latest ./myproj1'
+                bat 'docker build -t omarsa999/myfirstimage:latest .'
                 bat 'docker push omarsa999/myfirstimage:latest'
+            }
+        }
+
+        stage('Terraform plan'){
+            steps{
+                bat 'terraform init'
+                bat 'terraform plan'
+            }
+        }
+
+        stage('Terraform apply') {
+            steps{
+                bat 'terraform apply -auto-approve'
             }
         }
 
@@ -31,7 +44,7 @@ pipeline {
                 /*bat 'echo %USERPROFILE%' //Ckeck the file location ( here we talk about kubeconfig )
                 bat 'kubectl config current-context' //Check if Jenkins talk to the right cluster
                 bat 'kubectl get nodes' //Show the nodes*/
-                bat 'minikube kubectl -- apply -f ./myproj1/K8s/'
+                bat 'kubectl apply -f ./K8s/'
                 }
             }
         }
